@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=AWF.exe
+Icon=AsteroidsWarfield
+Name=AsteroidsWarfield
+Terminal=false
+StartupNotify=true
+Comment=Spaceships fights in asteroids field
+Categories=Game

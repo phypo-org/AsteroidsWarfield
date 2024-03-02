@@ -1,0 +1,82 @@
+
+#include "O3dObjBSplineSurf.h"
+#include "T3d/T3dColor.h"
+
+
+#include <stdio.h>
+
+
+/*---------------------------------------------------------------------*/
+/*    O3dObjBSplineSurf::O3dObjBSplineSurf ...                       */
+/*---------------------------------------------------------------------*/
+
+O3dObjBSplineSurf::O3dObjBSplineSurf( )
+:cUMemMaille(0),
+ cVMemMaille(0)
+{
+}
+/*---------------------------------------------------------------------*/
+/*    O3dObjPoint::drawId ...                                         */
+/*---------------------------------------------------------------------*/
+
+void
+O3dObjBSplineSurf::drawId( O3dViewProps& pVProps, O3dObjProps* pObjProps)
+{
+	if( pVProps.ViewPropsBool::get( DRAW_ID ) == GL_FALSE )
+		return;
+
+	char tmp[33];
+	sprintf( tmp,  "Surface %ld ", cId );
+
+	Double3 & lData = cData.get( 0 );
+	if( lData == NULL )
+		return;
+
+	glDisable(GL_LIGHTING);
+	
+	if( isSelect() )
+	{
+	   	T3dColor::Red();
+		T3dPrimitiv::DrawX( lData[0], lData[1], lData[2], 10 );
+	}
+	else
+       T3dColor::Yellow();
+
+	glEnable(GL_LIGHTING);
+
+	pVProps.getDefaultFont()->displayAtPoint( lData, tmp ); 
+}
+/*---------------------------------------------------------------------*/
+/*    AX3dBSplineSurf::drawObj ...                                        */
+/*---------------------------------------------------------------------*/
+
+void
+O3dObjBSplineSurf::drawObj( O3dViewProps& pVProps, O3dObjProps* pObjProps)
+{
+	if( cPoles.getNbPoint() == 0 )
+		return;
+
+	if( cUMemMaille != pVProps.ViewPropsInt::get( UMAILLE )
+		|| cVMemMaille != pVProps.ViewPropsInt::get( VMAILLE ))
+	{
+		cData.clear();
+		cUMemMaille = pVProps.ViewPropsInt::get( UMAILLE );
+		cVMemMaille = pVProps.ViewPropsInt::get( VMAILLE );
+
+	    T3dPrimitiv::BSplinePoles2Surf( cUMemMaille, cVMemMaille, cPoles, cPU, cPV, cData, cU, cV );
+	}
+
+	O3dObjShape::drawObj( pVProps, pObjProps);
+}
+/*---------------------------------------------------------------------*/
+/*    void AX3dBSplineSurf::makePole ...                               */
+/*---------------------------------------------------------------------*/
+
+void O3dObjBSplineSurf::makePoles( O3dObjShape& pShape )
+{
+	T3dPrimitiv::BSplineSurf2Poles( pShape.get(), pShape.getNbU(), pShape.getNbV(), cPoles, cPU, cPV );
+
+
+	// Pour la MinMaxBox de NormalizeBox
+	T3dPrimitiv::BSplinePoles2Surf( 1, 1, cPoles, cPU, cPV, cData, cU, cV );
+}

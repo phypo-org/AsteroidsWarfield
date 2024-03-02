@@ -1,0 +1,19 @@
+#!/bin/bash
+echo $0
+
+cd "$(dirname "$0")"
+
+
+# echo "APPIMAGE=$APPIMAGE"
+# echo "APPDIR=$APPDIR"
+echo "OWD=$OWD"
+# echo "ARGV0=$ARGV0"
+
+PARAM_PATH_CONFIG=" -Iusr/share/"
+PARAM_PATH_DATA=" -Dusr/share/"
+PARAM_PATH_SAV=" -A$OWD"
+
+export LD_LIBRARY_PATH=./usr/lib
+exec ./usr/bin/AWF.exe  $PARAM_PATH_CONFIG $PARAM_PATH_SAV $PARAM_PATH_DATA
+
+

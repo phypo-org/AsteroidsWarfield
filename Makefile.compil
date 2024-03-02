@@ -1,0 +1,92 @@
+# recuperation du nom des .cpp et des .o
+#---------------------------------------
+
+ifeq ($(TARGET_DIR),Release)
+STRIP_CMD=strip 
+else
+STRIP_CMD=echo
+endif
+
+OBJDIR=$(TARGET_DIR)/
+
+ifdef TARGET
+OTARGET=$(OBJDIR)$(TARGET)
+endif
+
+ifdef TARGET_LIB
+OTARGET_LIB=$(OBJDIR)$(TARGET_LIB)
+endif
+
+
+T3dLIB=$(ROOT_POS)T3d
+O3dLIB=$(ROOT_POS)O3d
+U3dLIB=$(ROOT_POS)U3d
+Sprite3dLIB=$(ROOT_POS)Sprite3d
+SpaceLIB=$(ROOT_POS)Space
+MainLIB=$(ROOT_POS)Main
+
+
+T3dLIB_HDRS=$(wildcard $(T3dLIB)/*.h)
+T3dLIB_SRCS=$(wildcard $(T3dLIB)/*.cpp)
+T3dLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(T3dLIB_SRCS) ) )
+
+O3dLIB_HDRS=$(wildcard $(O3dLIB)/*.h)
+O3dLIB_SRCS=$(wildcard $(O3dLIB)/*.cpp)
+O3dLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(O3dLIB_SRCS) ) )
+
+U3dLIB_HDRS=$(wildcard $(U3dLIB)/*.h)
+U3dLIB_SRCS=$(wildcard $(U3dLIB)/*.cpp)
+U3dLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(U3dLIB_SRCS) ) )
+
+Sprite3dLIB_HDRS=$(wildcard $(Sprite3dLIB)/*.h)
+Sprite3dLIB_SRCS=$(wildcard $(Sprite3dLIB)/*.cpp)
+Sprite3dLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(Sprite3dLIB_SRCS) ) )
+
+SpaceLIB_HDRS=$(wildcard $(SpaceLIB)/*.h)
+SpaceLIB_SRCS=$(wildcard $(SpaceLIB)/*.cpp)
+SpaceLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(SpaceLIB_SRCS) ) )
+
+MainLIB_HDRS=$(wildcard $(MainLIB)/*.h)
+MainLIB_SRCS=$(wildcard $(MainLIB)/*.cpp)
+MainLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(MainLIB_SRCS) ) )
+
+SPLIB_HDRS=$(wildcard $(SPLIB)/*.h)
+SPLIB_SRCS=$(wildcard $(SPLIB)/*.cpp)
+SPLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(SPLIB_SRCS) ) )
+
+# L'ensemble des .o pour le repertoires objs
+OBJECTS=$(addprefix $(OBJDIR), $(O3dLIB_OBJS) $(T3dLIB_OBJS) $(U3dLIB_OBJS) $(Sprite3dLIB_OBJS) $(SpaceLIB_OBJS) $(MainLIB_OBJS) $(SPLIB_OBJS))
+
+
+# Les chemins ou chercher les .cpp
+#----------------------------------
+vpath %.cpp $(U3dLIB) $(SPLIB) $(T3dLIB) $(O3dLIB) $(Sprite3dLIB) $(SpaceLIB) $(MainLIB)
+
+
+
+# compilation, link ,clean ...
+#-------------------------------
+
+$(OBJDIR)%.o: %.cpp
+	mkdir -p $(OBJDIR)
+	$(CC) -c  $(INCLUDE) $(CCFLAGS) -o $@  $^
+
+# link
+$(OTARGET): $(OBJECTS)
+	rm -rf $(OTARGET)
+	$(CC)  $(CCFLAGS) $(LDFLAGS)  -o  $@  $^  $(EXTERNAL_LIBS)
+
+# lib
+$(OTARGET_LIB): $(OBJECTS)
+	rm -rf  $(OTARGET_LIB)
+	ar cq  $(OTARGET_LIB) -o  $@  $^
+	$(STRIP_CMD) $(OTARGET_LIB)
+	   
+clean:
+	rm -rf $(OBJDIR) $(DBG_DIR) $(REL_DIR) 
+	rm -rf *.o *.a *.exe core $(OTARGET)
+
+.PHONY: clean
+
+# Pour le debuggage des variable  : make print-O3dLIB // par exemple
+# print-%  : ; @echo $* = $($*)

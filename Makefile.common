@@ -1,0 +1,159 @@
+# include ${FLTK_PATH}/makeinclude
+# include fltk-config --includedir
+
+include ${FLTK_PATH}/makeinclude
+
+
+ifndef FLAGS_COMPIL_EXT
+FLAGS_COMPIL_EXT=
+endif
+
+# Par default le source est directement dans les sous repertoires
+# Sinon il faut renseigner ROOT_POS. ex ROOT_POS=../../
+#------------------------------------------------------------------
+ifndef ROOT_POS
+ROOT_POS=
+endif
+
+
+
+
+ifdef NO_LUA
+
+INC_LUA= -DLUA_NOT_USE
+LIB_LUA=
+
+else
+
+INC_LUA= -I/usr/include/lua5.4
+LIB_LUA= -L/usr/lib/x86_64-linux-gnu -llua5.4
+FLAGS_COMPIL_EXT += -DUSING_LUA
+
+endif
+
+
+
+
+ifdef    USING_CGAL
+
+FLAGS_COMPIL_EXT += -DUSING_CGAL
+INC_CGAL= -I/home/phipo/Bin/CGAL
+LIB_CGAL=  -lboost_thread  -lgmp
+
+endif
+
+
+ifdef USING_OPENAL
+
+INC_OPENAL=-I$(OPENAL_INC)
+LIB_OPENAL=-L$(OPENAL_LIB)
+else
+INC_OPENAL=
+LIB_OPENAL=
+endif
+
+
+DBG_DIR=Debug
+REL_DIR=Release
+
+TARGET_DIR=$(REL_DIR)
+
+# les macros definies sur la ligne de commande
+#---------------------------------------------
+
+
+
+ifdef DBG_LOG
+FLAGS_COMPIL_EXT += -DDBG_ACTIVATED
+TARGET_DIR=$(DBG_DIR)
+# exemple make DBG_LOG=1
+endif
+
+ifdef FILE_LOG
+FLAGS_COMPIL_EXT += -DLOG_ACTIVATED
+# exemple make FILE_LOG=1
+endif
+
+ifdef SMALL_DEBUG
+FLAGS_COMPIL_EXT += -DSMALL_DEBUG
+TARGET_DIR=$(DBG_DIR)
+endif
+
+
+ifdef USE_NATIVE
+FLAGS_COMPIL_EXT +=march=native
+# exemple make USE_NATIVE=1
+endif
+
+
+# Le compilateur utilisé
+#-----------------------
+
+ifdef USE_CC
+
+CC=$(USE_CC)bin/g++
+# exemple make USE_CC=$GCC8
+# exemple make USE_CC=$GCC9
+
+INCLUDE_CC=-I$(USE_CC)include
+LIB_CC=-L$(USE_CC)/lib64
+
+else
+CC=g++ -g
+
+LIB_CC=-L/usr/lib/x86_64-linux-gnu 
+endif
+
+
+# Les libs externes (NE PAS ENLEVER !!!!)
+#-------------------
+
+EXTERNAL_PATH=$(ROOT_POS)../..
+
+
+
+
+# Options de compilation
+#------------------------
+
+OPTIM=-D_FORTIFY_SOURCE=2 -Ofast
+STRIP_LINK=,--strip-all
+
+ifdef USE_GDB
+      OPTIM=-Og -ggdb3
+      TARGET_DIR=$(DBG_DIR)
+      STRIP_LINK=
+# exemple make USE_GDB=1
+endif
+
+
+IGNORE=-Wno-format-nonliteral -Wno-unused-parameter -Wno-unused-variable -Wno-cast-function-type -Wno-error=cast-function-type -Wno-conversion -Wno-shadow
+
+
+CCFLAGS= -std=c++20 -m64   -Wall -Werror -Wextra -Wformat=2 \
+		-Wl,-z,relro,-z,now$(STRIP_LINK) -Wconversion -fPIE $(IGNORE) -Wpedantic -Wstack-protector -fstack-protector-all \
+		-D_REENTRANT $(OPTIM) \
+		-D_POSIX_PTHREAD_SEMANTICS  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE \
+		$(FLAGS_COMPIL_EXT)
+
+# CINCLUDE=-I. -IShape -DLINUX -I/usr/include/python3.6  $(INC_LUA)
+
+
+
+# Parametres de link
+#-------------------
+LDFLAGS= -pie -lpthread -ldl -lm 
+
+
+# Les includes
+#-----------------
+
+
+INCLUDE= -I$(ROOT_POS) -I$(ROOT_POS)../  $(INCLUDE_CC) -I.. -I.   -I${FLTK_PATH} -I/usr/include/freetype2  $(INC_LUA) $(INC_CGAL) $(INC_OPNAL)
+ 
+
+# Les libbrairies externes
+#-------------------------
+EXTERNAL_LIBS= -L$(EXTERNAL_PATH) $(LIB_CC) -L$(FLTK_PATH)/lib -L/usr/lib/x86_64-linux-gnu/ -lfltk_gl -lfltk -lfltk_images $(GLDLIBS) -ljpeg -lpng  $(LIB_LUA) $(LIB_CGAL) $(LIB_OPENAL)
+
+# -lpython3.6m

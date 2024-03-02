@@ -1,0 +1,18 @@
+
+
+
+- Mettre une vraio fenetre FLTK au lieu de GLUT, et mettre des Buttons
+   dedans plutot que le dialogue actuel
+   
+- le son ne semble plus marcher
+
+- touche ALT intercepter par FLTK ?
+
+- Portage windows avec FLTK
+
+
+
+
+- modifier le lancement des mines par le vaisseau
+
+

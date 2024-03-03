@@ -45,8 +45,11 @@ endif
 
 ifdef USING_OPENAL
 
+FLAGS_COMPIL_EXT += -DUSE_SOUND
+
 INC_OPENAL=-I$(OPENAL_INC)
-LIB_OPENAL=-L$(OPENAL_LIB)
+LIB_OPENAL=-L$(OPENAL_LIB) -lopenal   -lsndfile
+
 else
 INC_OPENAL=
 LIB_OPENAL=
@@ -149,7 +152,7 @@ LDFLAGS= -pie -lpthread -ldl -lm
 #-----------------
 
 
-INCLUDE= -I$(ROOT_POS) -I$(ROOT_POS)../  $(INCLUDE_CC) -I.. -I.   -I${FLTK_PATH} -I/usr/include/freetype2  $(INC_LUA) $(INC_CGAL) $(INC_OPNAL)
+INCLUDE= -I$(ROOT_POS) -I$(ROOT_POS)../  $(INCLUDE_CC) -I.. -I.   -I${FLTK_PATH} -I/usr/include/freetype2  $(INC_LUA) $(INC_CGAL) $(INC_OPENAL)
  
 
 # Les libbrairies externes

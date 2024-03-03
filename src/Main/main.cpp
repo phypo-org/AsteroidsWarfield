@@ -447,7 +447,7 @@ int main(int argc, char **argv)
       lDataSound += lName.c_str();   
     }
   
-  WorldGame::InitSound(lData.c_str()); // Pour les sons notamment
+  WorldGame::InitSound(lDataSound.c_str());
 
   // SOUND
 

@@ -102,7 +102,7 @@ WorldGame::initStart( int pNiveau, const char* pNameFileSav )
 
       //			std::cout << "pLevel:" << cLevel << std::endl;
       // Message NEXT LEVEL
-      if( cLevel!= pNiveau )
+      if( cLevel != pNiveau )
         {
           cSceneManager->addSceneTempo(4);
           cSceneManager->addScene( makeBanniere( "Game.TextureNextLevel", lBanColor, 3), 4);

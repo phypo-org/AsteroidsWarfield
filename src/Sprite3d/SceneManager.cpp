@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include "Utils/PPFile.h"
 
 // **************************************
 SceneManager::SceneManager()
@@ -15,6 +16,8 @@ SceneManager::SceneManager()
    cWorld(NULL)
 {
   cStrInfo[0] = '\0';
+
+
 }
 
 //------------------------------
@@ -159,7 +162,7 @@ SceneManager::read( std::istream & pIs ){
 }
 
 //-------------
-void
+GLboolean
 SceneManager::restoreStateFromFile( World* pWorld,  const char* pName ){
 
  
@@ -167,22 +170,22 @@ SceneManager::restoreStateFromFile( World* pWorld,  const char* pName ){
   std::cout << "*** restoreStateFromFile " << pName << std::endl;
 
   if( Pilot::ThePilot == NULL )
-    return;
+    return GL_FALSE;
 
   std::ifstream lFis( pName );
   if( lFis.fail()){
     std::cout << "Opening " << pName << " failed !" << std::endl;
-    return;
+    return GL_FALSE;
   }
 
   if( read( lFis )== false ){
     std::cout << "read scene fail" << std::endl;
-    return ;
+    return GL_FALSE;
   }
 
   if( Pilot::ThePilot->read(lFis)== false ){
     std::cout << "read pilot fail" << std::endl;
-    return ;
+    return GL_FALSE;
   }
 
 
@@ -190,9 +193,10 @@ SceneManager::restoreStateFromFile( World* pWorld,  const char* pName ){
 
 
   internalGo( pWorld );
+  return GL_TRUE;
 }
 //-------------
-void
+GLboolean
 SceneManager::saveStateToFile( const char* pName ){
 
   std::cout << "SceneManager::saveStateToFile " << pName << std::endl;
@@ -202,8 +206,21 @@ SceneManager::saveStateToFile( const char* pName ){
     {
       lStrFile << sDirSavPath << '/';
     }
-  lStrFile << sDirSav <<'/';
-  lStrFile << pName;
+  lStrFile << sDirSav;
+  if( PPu::PPFile::DoMkdir( lStrFile.str()  ) == false)
+    {
+      std::cerr << "*** Error : SceneManager::saveStateToFile failed to create directory <<<"
+                << lStrFile.str() << ">>>" << std::endl;
+      return GL_FALSE;
+    }
+  //  else
+  //   {
+      //     std::cerr << "*** Info : SceneManager::saveStateToFile  create directory <<<"
+  //              << lStrFile.str() << ">>>" << std::endl;
+ 
+  //   }
+          
+  lStrFile  <<'/'<< pName;
   lStrFile << '_';
   lStrFile << std::setfill('0') << std::setw(3) <<  sSavNum++;
   lStrFile << ".sav" ;
@@ -212,11 +229,11 @@ SceneManager::saveStateToFile( const char* pName ){
   std::cout << "\tsaveStateToFile " << lStrFile.str() << std::endl;
 
   if( Pilot::ThePilot == NULL )
-    return;
+    return GL_FALSE;
 
   std::ofstream lFos( lStrFile.str().c_str());
   if( lFos.bad())
-    return;
+    return GL_FALSE;
 
   std::cout << "\tsaveStateToFile ok " << lStrFile.str() << std::endl;
 
@@ -227,6 +244,7 @@ SceneManager::saveStateToFile( const char* pName ){
   lFos << std::endl;
 
   lFos.close();
+  return GL_TRUE;
 }
 //-----------------------------------------------------------
 // Lance la premiere scene du scenario, c'est la fin

@@ -18,6 +18,7 @@
 #include <Sprite3d/ObjPart.h>
 #include <Sprite3d/Sprite3d.h>
 #include <Sprite3d/Utils3d.h>
+
 #include <Sprite3d/Collision.h>
 #include <Sprite3d/ObjText2d.h>
 #include <Sprite3d/ObjText.h>
@@ -310,7 +311,7 @@ int main(int argc, char **argv)
                   if( lAutoPath[lSz-1] != '/')
                     {
                       lAutoPath += '/';
-                      SceneManager::SetSavPath( lAutoPath ); 
+                      SceneManager::SetSavPath( lAutoPath );                      
                     }
                 }
             }

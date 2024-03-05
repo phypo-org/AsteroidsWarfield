@@ -18,6 +18,7 @@ OTARGET_LIB=$(OBJDIR)$(TARGET_LIB)
 endif
 
 
+ULIB=$(ROOT_POS)Utils
 T3dLIB=$(ROOT_POS)T3d
 O3dLIB=$(ROOT_POS)O3d
 U3dLIB=$(ROOT_POS)U3d
@@ -25,6 +26,9 @@ Sprite3dLIB=$(ROOT_POS)Sprite3d
 SpaceLIB=$(ROOT_POS)Space
 MainLIB=$(ROOT_POS)Main
 
+ULIB_HDRS=$(wildcard $(ULIB)/*.h)
+ULIB_SRCS=$(wildcard $(ULIB)/*.cpp)
+ULIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(ULIB_SRCS) ) )
 
 T3dLIB_HDRS=$(wildcard $(T3dLIB)/*.h)
 T3dLIB_SRCS=$(wildcard $(T3dLIB)/*.cpp)
@@ -55,12 +59,12 @@ SPLIB_SRCS=$(wildcard $(SPLIB)/*.cpp)
 SPLIB_OBJS=$(notdir  $(patsubst %.cpp, %.o,  $(SPLIB_SRCS) ) )
 
 # L'ensemble des .o pour le repertoires objs
-OBJECTS=$(addprefix $(OBJDIR), $(O3dLIB_OBJS) $(T3dLIB_OBJS) $(U3dLIB_OBJS) $(Sprite3dLIB_OBJS) $(SpaceLIB_OBJS) $(MainLIB_OBJS) $(SPLIB_OBJS))
+OBJECTS=$(addprefix $(OBJDIR), $(ULIB_OBJS) $(O3dLIB_OBJS) $(T3dLIB_OBJS) $(U3dLIB_OBJS) $(Sprite3dLIB_OBJS) $(SpaceLIB_OBJS) $(MainLIB_OBJS) $(SPLIB_OBJS))
 
 
 # Les chemins ou chercher les .cpp
 #----------------------------------
-vpath %.cpp $(U3dLIB) $(SPLIB) $(T3dLIB) $(O3dLIB) $(Sprite3dLIB) $(SpaceLIB) $(MainLIB)
+vpath %.cpp  $(U3dLIB) $(SPLIB) $(T3dLIB) $(O3dLIB) $(Sprite3dLIB) $(SpaceLIB) $(ULIB) $(MainLIB)
 
 
 

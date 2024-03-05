@@ -168,15 +168,18 @@ WorldControler::resume()
     setCurrent(cGame);
 }
 //--------------------------------
-void
+bool
 WorldControler::start( int pLevel, const char* pFileNameSav)
 {
   if( cCurrentWorld == cMainWorld )
     {
       cGame->freeRessources();
-      cGame->initStart( pLevel, pFileNameSav);
+      if( cGame->initStart( pLevel, pFileNameSav) == GL_FALSE )
+        return GL_FALSE;
       setCurrent( cGame );
+      return GL_TRUE;
     }
+  return GL_FALSE;
 }
 //------------------------------------------------------
 //-------------------- STATIC --------------------------

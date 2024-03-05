@@ -34,7 +34,7 @@ public:
 	virtual void quit();
 	virtual void mainWorld();
 	virtual void helpWorld();
-	virtual void start( int pLevel=0, const char* pFileNameSav = NULL);
+	virtual bool start( int pLevel=0, const char* pFileNameSav = NULL);
 	virtual void resume();
 
 	void setGame( World* pGame ) { cGame = pGame; cGame->setMyControler(this);}

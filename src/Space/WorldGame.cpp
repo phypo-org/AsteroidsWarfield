@@ -292,7 +292,10 @@ WorldGame::initStart( int pNiveau, const char* pNameFileSav )
   setPilot( lPilot );
 
   if( pNameFileSav != NULL )
-    cSceneManager->restoreStateFromFile( this, pNameFileSav );
+    {
+      if( cSceneManager->restoreStateFromFile( this, pNameFileSav ) == GL_FALSE)
+        return GL_FALSE;
+    }
   else
     cSceneManager->go(this);
 

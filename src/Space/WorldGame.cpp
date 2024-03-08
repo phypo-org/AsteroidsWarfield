@@ -433,13 +433,19 @@ bool
 WorldGame::InitSound( const char* pPathSound)
 {
   //	std::cout << "WorldGame::InitSound " << pPathSound << std::endl;
-	
+  
   new SoundControler( 20, pPathSound );
 
   WeaponsMaker::InitSound();
   ActionsShip::InitSound();
   Pilot::InitSound();
 
+
+
+  //	 SoundControler::sTheSoundControler->playSample( sSoundMotor, 100, 1.0f, 1.0f, true);
+
+
+  
   /*
     WeaponsMaker::sSoundWeaponExplode         = LOAD_SAMPLE( "Explode.wav" );
     WeaponsMaker::sSoundWeaponExplodePlasma   = LOAD_SAMPLE( "ExplodePlasma.mp3" );
@@ -510,13 +516,13 @@ WorldGame::GetPathConfig( std::string & pName, WorldGame::PathType pPath, const 
 T3dTexture*
 WorldGame::LoadTextureConfig( const char* pKey, GLenum pFilter  )
 {
-  std::cout << "WorldGame::LoadTextureConfig " << pKey << std::endl;
+  //  std::cout << "WorldGame::LoadTextureConfig " << pKey << std::endl;
 
 
   std::string lName ;			
   GetPathConfig( lName, PathType::TEXTURE,  pKey );
 		
-  std::cout << "WorldGame::LoadTextureConfig" << pKey << " LOADING   >>>" << lName << std::endl;
+  //  std::cout << "WorldGame::LoadTextureConfig" << pKey << " LOADING   >>>" << lName << std::endl;
 
 
   return  new T3dTexture( lName.c_str(), pFilter );

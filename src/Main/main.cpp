@@ -394,18 +394,6 @@ int main(int argc, char **argv)
 
   //	std::cout << "fullscreen: " << lFullScreen << " Size:" << lSize << std::endl;
 
-  /*
-    slScheduler sched ( 8000 ) ;
-    sched . setSafetyMargin ( 0.128f ) ;
-    slSample *s2 = new slSample ( "Data/sound/zzap.wav" , & sched ) ;
-    s2 -> adjustVolume ( 5.0f  ) ;
-    sched . playSample ( s2 ) ;
-    while ( SL_TRUE )
-    {
-    Sleep ( 1000 / 30 ) ;
-    sched . update () ;
-    }
-  */
   #define AWF_VERSION " BETA 0.9.2.0"
 
   //	SoundControler lSoundControler;
@@ -425,20 +413,7 @@ int main(int argc, char **argv)
   //  window.end();
  	
   //=====================================
-	
 
-  GameWorldControler lWControl( lTest, lSize, 80*lSize, 60*lSize, lFullScreen );
-
-
-  WorldControler::SetRate( lRate );
-
-
-
-  //	InitWorld(lSize, lTest);
-
-  lWControl.mainWorld();
-
-  
   // SOUND
   std::string lDataSound( lData );
   std::map<std::string, std::string>::iterator lIterator = World::sConfig.find("Paths.Sounds");
@@ -449,7 +424,18 @@ int main(int argc, char **argv)
     }
   
   WorldGame::InitSound(lDataSound.c_str());
+	
 
+  GameWorldControler lWControl( lTest, lSize, 80*lSize, 60*lSize, lFullScreen );
+
+
+  WorldControler::SetRate( lRate );
+
+
+
+  lWControl.mainWorld();
+
+  
   // SOUND
 
 

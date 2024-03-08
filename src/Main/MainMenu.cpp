@@ -55,22 +55,31 @@
 #include <memory>
 
 
+#include "Utils/PPSingletonCrtp.h"
+
+
+#define StartDiag StartDialog::Instance()
 
 //**************************************
 
-class MyDialog {
+class StartDialog  : public virtual PPSingletonCrtp<StartDialog>{
 	
-  Fl_Double_Window* myWindow;
+  Fl_Double_Window* cMyWindow = nullptr;
 	
+  friend class PPSingletonCrtp;
 	
-  std::unique_ptr<MyCheckbutton> cCheckMute; 
-  MainMenu& cMainMenu;
+  // std::unique_ptr<MyCheckbutton> cCheckMute; 
+  MyCheckbutton    * cCheckMute;
+  
+  MainMenu * cMainMenu = nullptr;
 
 public:
-  MyDialog( MainMenu& rMainMenu );
-  bool cContinue;
+  StartDialog() {;}
+   void init( MainMenu & rMainMenu );
 
   std::string cExecSavLevel;
+
+  Fl_Double_Window* getMyWindow()  { return cMyWindow;}
 
 protected:
 	
@@ -87,13 +96,21 @@ protected:
   static void CheckCB( Fl_Widget*, void*pUserData );
 
   void maj();
-	
+
+public:
+  static bool IsAlreadyRunning() { return StartDiag.cMyWindow != nullptr; }
+
 };
 //----------------------------------------
  
-MyDialog::MyDialog(  MainMenu& rMainMenu )
-  :cMainMenu( rMainMenu )
+void
+StartDialog::init(MainMenu & rMainMenu)
 {
+
+
+  //  std::cout << "StartDialog::init " << std::endl;
+  
+  cMainMenu = & rMainMenu;
   int lX = 20;
   int lY= 20;
 
@@ -102,12 +119,12 @@ MyDialog::MyDialog(  MainMenu& rMainMenu )
   int lH = 25;
   int lYStep = 30;
 
-  myWindow = new Fl_Double_Window(200, 330, "Asteroid Fighter");
-  myWindow->position( 1000, 300 );
-  myWindow->set_modal();
-  myWindow->clear_border();
+  cMyWindow = new Fl_Double_Window(200, 330, "Asteroid Fighter");
+  cMyWindow->position( 1000, 300 );
+  cMyWindow->set_modal();
+  //  cMyWindow->clear_border();
 	
-  //	myWindow->callback((Fl_Callback*)CancelCB, this);
+  //	cMyWindow->callback((Fl_Callback*)CancelCB, this);
 
 	
   { Fl_Button* o = new Fl_Button(lX, lY, lW, lH, "Start EXTREME ");
@@ -135,7 +152,7 @@ MyDialog::MyDialog(  MainMenu& rMainMenu )
     o->callback((Fl_Callback*)ReadSavedLevelCB, this );
   } // Fl_Button* o
   lY += lYStep;
-  cCheckMute = std::unique_ptr<MyCheckbutton>( new MyCheckbutton( lX, lY, lW, lH, "Sound MUTE", CheckCB, this, 0 ));
+  cCheckMute = new MyCheckbutton( lX, lY, lW, lH, "Sound MUTE", CheckCB, this, 0 );
 	
   if(	SoundControler::sMute == GL_FALSE )
     cCheckMute->value( 0 );
@@ -149,21 +166,27 @@ MyDialog::MyDialog(  MainMenu& rMainMenu )
   } // Fl_Button* o
   lY += lYStep;
 	
-  myWindow->end();
+  cMyWindow->end();
 		
-  myWindow->show( 0, nullptr);
+  cMyWindow->show( 0, nullptr);
   maj();
-  cContinue = true;
-  while (Fl::wait() && cContinue );
 
-  std::cout << "*********************************** FIN DIALIOGUE **************************" << std::endl;
 
+  //long long i=0;   
+ while (Fl::wait() && cMyWindow != nullptr )
+   {
+     //    if( i++ %500 == 0)
+       //      std::cout << "." << std::flush;
+   }
+
+ //  std::cout << "*********************************** FIN DIALIOGUE **************************" << std::endl;
 
 }
+
 //----------------------------------------
-void MyDialog::maj()
+void StartDialog::maj()
 {	
-  std::cout << "-- Sound Mute : " << SoundControler::sMute << std::endl;
+  //  std::cout << "-- Sound Mute : " << SoundControler::sMute << std::endl;
   bool lFlagSoundMute          = (cCheckMute->value() != 0 );
 		
   if( lFlagSoundMute )
@@ -171,97 +194,97 @@ void MyDialog::maj()
   else
     SoundControler::sMute = GL_FALSE;
 
-  std::cout << "++ Sound Mute : " << SoundControler::sMute << std::endl;
+  //  std::cout << "++ Sound Mute : " << SoundControler::sMute << std::endl;
 }
 //----------------------------------------
-void MyDialog::StartExtremCB( Fl_Widget*, void* pUserData ) {
-  std::cout << "StartExtremCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+void StartDialog::StartExtremCB( Fl_Widget*, void* pUserData ) {
+    std::cout << "StartExtremCB" << std::endl;
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 
   WorldControler::sDifficultyLevel = 4;
 
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;						 
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
 }
 //----------------------------------------
-void MyDialog::StartHardCB( Fl_Widget*, void* pUserData ) {
+void StartDialog::StartHardCB( Fl_Widget*, void* pUserData ) {
   std::cout << "StartHardCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 
   WorldControler::sDifficultyLevel = 3;
 
 
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
 }
 //----------------------------------------
-void MyDialog::StartMediumCB( Fl_Widget*, void* pUserData ) {
+void StartDialog::StartMediumCB( Fl_Widget*, void* pUserData ) {
   std::cout << "StartMediumCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 	
   WorldControler::sDifficultyLevel = 2;
 
 
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
 }
 //----------------------------------------
-void MyDialog::StartEasyCB( Fl_Widget*, void* pUserData ) {
+void StartDialog::StartEasyCB( Fl_Widget*, void* pUserData ) {
   std::cout << "StartEasyCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 
   WorldControler::sDifficultyLevel = 1;
 
 
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
 }
 //----------------------------------------
-void MyDialog::StartGentileCB( Fl_Widget*, void* pUserData ) {
+void StartDialog::StartGentileCB( Fl_Widget*, void* pUserData ) {
   std::cout << "StartGentileCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 
   WorldControler::sDifficultyLevel = 0;
 
 
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
 }
 //----------------------------------------
-void MyDialog::QuitAll( Fl_Widget*, void* pUserData ) {
+void StartDialog::QuitAll( Fl_Widget*, void* pUserData ) {
   std::cout << "StartGentileCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 	
 
 	
-  Fl::delete_widget( lDialog->myWindow );
-  lDialog->cContinue = false;
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow = nullptr;						 
   //lDialog->cMainMenu.getMyControler()->quit();
 	
   ::exit(0);
 }
 //----------------------------------------
-void  MyDialog::ReadSaveFileCB ( Fl_File_Chooser *iFc,  void  *iUserData)
+void  StartDialog::ReadSaveFileCB ( Fl_File_Chooser *iFc,  void  *iUserData)
 {
   if( iFc->value()  )
     {
       std::string lFilename = iFc->value();
-      MyDialog* lDialog = reinterpret_cast<MyDialog*>(iUserData);
+      StartDialog* lDialog = reinterpret_cast<StartDialog*>(iUserData);
       
       if( lFilename.length() > 0)
 	{
 	  std::cout << lFilename << std::endl;
 	  lDialog->cExecSavLevel = lFilename;
 	  
-	  //	  Fl::delete_widget( lDialog->myWindow );
-	  lDialog->cContinue = false;		 
+	  //	  Fl::delete_widget( lDialog->cMyWindow );
+          //          lDialog->cMyWindow = nullptr;						 
 	}
     }
 }
 //----------------------------------------
-void MyDialog::ReadSavedLevelCB( Fl_Widget*, void* pUserData ) {
+void StartDialog::ReadSavedLevelCB( Fl_Widget*, void* pUserData ) {
   std::cout << "ReadSavedLevelCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 
   
   std::string  lStrPath;
@@ -282,23 +305,42 @@ void MyDialog::ReadSavedLevelCB( Fl_Widget*, void* pUserData ) {
 
   lFc->callback( ReadSaveFileCB, pUserData );			 
   lFc->show();
+  //  long long i=0;
   while (lFc->visible()) {
     Fl::wait();
+    
+    //  if( i++ %500 == 0)
+    //      std::cout << ":" << std::flush;
   }
-  Fl::delete_widget( lDialog->myWindow );
-					
+  std::cout << "fin ReadSavedLevelCB Window:" <<  lDialog->cMyWindow << std::endl;
+  //  lDialog->cMyWindow->hide();
+  
+  Fl::delete_widget( lDialog->cMyWindow );
+  lDialog->cMyWindow= nullptr;
+
+  std::cout << std::endl << "Fin StartDialog::ReadSavedLevelCB " << std::endl;
 }
 //----------------------------------------
-void MyDialog::CheckCB( Fl_Widget*, void*pUserData )
+void StartDialog::CheckCB( Fl_Widget*, void*pUserData )
 {
   std::cout << "CheckCB" << std::endl;
-  MyDialog* lDialog = reinterpret_cast<MyDialog*>(pUserData);
+  StartDialog* lDialog = reinterpret_cast<StartDialog*>(pUserData);
 	
   lDialog->maj(); 
 }
-
-//**************************************
-
+//----------------------------------------
+extern void CallStartDialog(  MainMenu & iMainMenu)
+{
+  //  std::cout << "CallStartDialog " <<std::endl;
+  
+  if( StartDiag.IsAlreadyRunning() == false )
+    {
+      StartDiag.init( iMainMenu );
+    }
+}
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 
 MainMenu* MainMenu::TheMainMenu = NULL;
@@ -450,12 +492,15 @@ MainMenu::reshapeWorld(int pWidth, int pHeight)
 //-----------------------------------------------
 void
 MainMenu::enterWorld( int pWidth, int pHeight)
-{
-  MyDialog lStartMenu(*this);
+{  
+  CallStartDialog( *this );
 
-  std::cout << "MainMenu::enterWorld " <<  lStartMenu.cExecSavLevel.c_str() << std::endl;
-  if( lStartMenu.cExecSavLevel.length() )
-    TheMainMenu->getMyControler()->start( 0, lStartMenu.cExecSavLevel.c_str() );
+  //  std::cout << "MainMenu::enterWorld " <<  StartDiag.cExecSavLevel.c_str()    
+  //            << "  Win:" <<  (void*) StartDiag.getMyWindow() << std::endl;
+  
+  
+  if( StartDiag.cExecSavLevel.length() )
+    TheMainMenu->getMyControler()->start( 0, StartDiag.cExecSavLevel.c_str() );
   else
     TheMainMenu->getMyControler()->start();
 }

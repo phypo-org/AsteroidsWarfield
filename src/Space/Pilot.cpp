@@ -65,6 +65,7 @@ PSoundId Pilot::sSoundBonus         =PBadSoundId;
 
 //static PSoundId sMusicGameOver=PBadSoundId;
 
+//-----------------------------------
 bool
 Pilot::InitSound()
 {
@@ -513,7 +514,13 @@ Pilot::Pilot( )
 
 
   //	 SoundControler::sTheSoundControler->playSample( sSoundMotor, 100, 1.0f, 1.0f, true);
-  playSoundSource( sSoundMotor, 100, 1.0f, 1.0f, true);
+
+  static bool sAlreadyPlay = false;
+  if( sAlreadyPlay == false )
+    {
+      playSoundSource( sSoundMotor, 100, 1.0f, 1.0f, true);
+      sAlreadyPlay= true;
+    }
 
 
 }

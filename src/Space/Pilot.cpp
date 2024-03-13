@@ -97,6 +97,7 @@ static const char* sStrErg ="Erg";
 static const char* sStrRocket ="Rocket";
 static const char* sStrScore ="Score";
 static const char* sStrMoney ="Money";
+static const char* sStrUpgrade ="NbUpgrade";
 //-----------------------------------
 
 void Pilot::write( std::ostream & pOs){
@@ -118,6 +119,7 @@ void Pilot::write( std::ostream & pOs){
       << sStrErg     << ' ' << cErg<< ' '
       << sStrScore   << ' ' << cScore << ' '
       << sStrMoney   << ' ' << cGold << ' '
+      << sStrUpgrade << ' ' << cNbUpgrade
       << ")";
 }
 //-----------------------------------
@@ -595,6 +597,11 @@ Pilot::scrollKamera()
 GLboolean
 Pilot::animate()
 {
+  if( cInvulnerable > 0 )
+    {
+      cInvulnerable--;
+    }
+
   if(SpriteFloat::get( SPRITE_LIFE_POINT ) <= 0 )
     return GL_TRUE;
 
@@ -1458,6 +1465,10 @@ Pilot::mouseButton( int pButton, int pState, int pX, int pY )
 //------------------------------------------------------------------
 GLboolean Pilot::collision( Sprite3d &pMySprite, Sprite3d &pSprite, void *pParam)
 {
+  if( cInvulnerable )
+    SpriteFloat::set( SPRITE_LIFE_POINT, SpriteFloat::get( SPRITE_MAX_LIFE_POINT ));
+  
+     
   if( pMySprite.SpriteFloat::get( SPRITE_LIFE_POINT ) < 0 )
     return GL_TRUE;
 
@@ -1550,10 +1561,27 @@ GLboolean Pilot::collision( Sprite3d &pMySprite, Sprite3d &pSprite, void *pParam
           lSoundSrc->setPosition(  getTransf().TransfDouble3::get(POS) );
 
           cNbLife--;
+          if(cNbLife>=0)
+            {
+              Float4 lBanColor( 0.9, 0.6, 0.6, 0.2 ) ;
+              Sprite3d* lSpBan = new Banniere( "Game.TextureOneLifeLost", lBanColor ); // "textures/OneLifeLost.gif", lBanColor );
+              Double3 lPosBan( 0, 0, 20 );
+              Double3 lSpeed( 0, 0, 20 );
+              Double3 lScale( 40, 40, 40 );
+              Double3 lSpin(25, 15, 15);
+              
+              lSpBan->MkSetPOS(   lPosBan  );
+              lSpBan->MkSetSPEED( lSpeed  );
+              lSpBan->MkSetSCALE( lScale  );
+              lSpBan->MkSetSPIN(  lSpin );
+              
+              WorldControler::Add( lSpBan );
+            }
 
           cRocket = cMaxRocket;
           cErg    = cMaxErg;
           SpriteFloat::set( SPRITE_LIFE_POINT, SpriteFloat::get( SPRITE_MAX_LIFE_POINT ));
+          cInvulnerable = 10;  // pour eviter de remourir tout de suite en cas de ggrosse collission
 
           // Un super effet WARP !!!
           SpriteExplosion *sp = new SpriteExplosion( getRadius()*10, 1, 0 );
@@ -1628,9 +1656,9 @@ Pilot::drawControl()
   //	lY -= 10;
 
   T3dColor::White();
-  sprintf(tmp,"Score:%ld", cScore);
+  sprintf(tmp,"Score:%ld/ Upd:%ld", cScore, cNbUpgrade);
   WorldControler::sCurrentFont->displayAt( lX, lY, lZ, tmp);
-  lX +=lStep;
+  lX +=lStep*1.2;
   //	lY -= 10;
 
   T3dColor::Yellow();
@@ -1788,6 +1816,7 @@ Pilot::collisionBonus( Sprite3d &pSprite, void *pParam)
 
         case CONTAINER_UPGRAD:
           {
+            cNbUpgrade++;
             int lVal3 = static_cast<int> (pSprite.SpriteFloat::get( CONTAINER_VALUE2 ));
 
             switch( lVal3 )

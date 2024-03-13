@@ -12,57 +12,58 @@
 
 
 enum EnumBonus{ CONTAINER_ERG, 
-								CONTAINER_ROCKET, 
-								CONTAINER_FIELD, 
-								CONTAINER_LIFE, 
-								CONTAINER_GOLD, 
-								CONTAINER_UPGRAD, 
-								CONTAINER_MAX};
+  CONTAINER_ROCKET, 
+  CONTAINER_FIELD, 
+  CONTAINER_LIFE, 
+  CONTAINER_GOLD, 
+  CONTAINER_UPGRAD, 
+  CONTAINER_MAX};
 
 enum EnumBonusUpgrad{ UPGRAD_ERG,
-											UPGRAD_ROCKET,
-											UPGRAD_FIELD,
+  UPGRAD_ROCKET,
+  UPGRAD_FIELD,
 
-											UPGRAD_PHASER,
-											UPGRAD_LAUNCHER,
-											UPGRAD_MOTOR,
-											MAX_UPGRAD};
+  UPGRAD_PHASER,
+  UPGRAD_LAUNCHER,
+  UPGRAD_MOTOR,
+  MAX_UPGRAD};
 
 //************************************************************
 class BonusMaker : public Action
 {
 public:
-	Float4    cColorErg;
-	Float4		cColorRocket;
-	Float4		cColorField;
-	Float4		cColorLife;
-	Float4		cColorGold;
-	Float4		cColorUpgrad;
-	Float4		cColorUpgradField;
+  Float4                cColorErg;
+  Float4		cColorRocket;
+  Float4		cColorField;
+  Float4		cColorLife;
+  Float4		cColorGold;
+  Float4		cColorUpgrad;
+  Float4		cColorUpgradField;
 
-	O3dObjProps cPropsErg;
-	O3dObjProps cPropsRocket;
-	O3dObjProps cPropsField;
-	O3dObjProps cPropsLife;
-	O3dObjProps cPropsGold;
-	O3dObjProps cPropsUpgrad;
+  O3dObjProps cPropsErg;
+  O3dObjProps cPropsRocket;
+  O3dObjProps cPropsField;
+  O3dObjProps cPropsLife;
+  O3dObjProps cPropsGold;
+  O3dObjProps cPropsUpgrad;
 
-	O3dObjProps cPropsSkeleton;
-	O3dObjProps cPropsUpgradField;
+  O3dObjProps cPropsSkeleton;
+  O3dObjProps cPropsUpgradField;
 
-	static const int MAX_BONUS=3;
+  static const int MAX_BONUS=3;
 
 public:		
-	O3dObj* cObjBonus[MAX_BONUS];
-	O3dObj* cObjUpgrad[MAX_BONUS];
+  O3dObj* cObjBonus[MAX_BONUS];
+  O3dObj* cObjUpgrad[MAX_BONUS];
+  
 
 public:
-	BonusMaker();	
+  BonusMaker();	
 
-	ObjVect*  makeBonus( float pSz );
-	ObjVect*  makeUpgrad( float pSz );
-	Sprite3d* makeSpriteBonus( int cObjType, EnumBonus pType, unsigned int pMaskObj, unsigned int pMakInteract, int pVal, int pVal2=0 );
-	Sprite3d* makeSpriteBonus( int cObjType, unsigned int pMaskObj, unsigned int pMakInteract, int pVal );
+  ObjVect*  makeBonus( float pSz );
+  ObjVect*  makeUpgrad( float pSz );
+  Sprite3d* makeSpriteBonus( int cObjType, EnumBonus pType, unsigned int pMaskObj, unsigned int pMakInteract, int pVal, int pVal2=0 );
+  Sprite3d* makeSpriteBonus( int cObjType, unsigned int pMaskObj, unsigned int pMakInteract, int pVal );
 };
 
 extern BonusMaker* TheBonusMaker;

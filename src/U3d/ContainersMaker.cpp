@@ -20,48 +20,48 @@ ContainersMaker* TheContainersMaker=NULL;
 
 //**********************************************************
 ContainersMaker::ContainersMaker()
-:cColorErg(0.3, 0.3, 0.1, 0.5 ),
- cColorRocket(0.1, 0.1, 0.4, 0.5),
- cColorLife(0.3, 0., 0.3, 0.5 )
+  :cColorErg(0.3, 0.3, 0.1, 0.5 ),
+   cColorRocket(0.1, 0.1, 0.4, 0.5),
+   cColorLife(0.3, 0., 0.3, 0.5 )
 {
-	TheContainersMaker = this;
+  TheContainersMaker = this;
 	
   cPropsErg.ObjPropsFloat4::set( MATERIAL, cColorErg );
-	cPropsErg.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
+  cPropsErg.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
 	
-	cPropsRocket.ObjPropsFloat4::set(  MATERIAL, cColorRocket );
-	cPropsRocket.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
+  cPropsRocket.ObjPropsFloat4::set(  MATERIAL, cColorRocket );
+  cPropsRocket.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
 	
-	cPropsLife.ObjPropsFloat4::set( MATERIAL, cColorLife);
-	cPropsLife.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
+  cPropsLife.ObjPropsFloat4::set( MATERIAL, cColorLife);
+  cPropsLife.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
 		
-	cPropsSkeleton.ObjPropsFloat4::set( MATERIAL, Yellow4);
-	cPropsSkeleton.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
-	cPropsSkeleton.ObjPropsBool::set(DRAW_OBJ_SOLID, 0);
+  cPropsSkeleton.ObjPropsFloat4::set( MATERIAL, Yellow4);
+  cPropsSkeleton.ObjPropsBool::set(DRAW_OBJ_SKELETON, 1);
+  cPropsSkeleton.ObjPropsBool::set(DRAW_OBJ_SOLID, 0);
 
-	cObjContainer = makeContainer( 4 );
+  cObjContainer = makeContainer( 4 );
 }
 //---------------------------------------
 ObjVect*
 ContainersMaker::makeContainer( float pSz )
 {
-	ObjVect* lObjVect = new ObjVect();
+  ObjVect* lObjVect = new ObjVect();
 
-	O3dObj* lObj1= new O3dObjPrim( O3dObjPrim::PrimSphere, pSz, 4, 4 );
-	lObj1->setObjProps( &cPropsSkeleton);
-	O3dObj* lObj2 = new O3dObjPrim( O3dObjPrim::PrimSphere, pSz*0.75, 4, 4 );
+  O3dObj* lObj1= new O3dObjPrim( O3dObjPrim::PrimSphere, pSz, 4, 4 );
+  lObj1->setObjProps( &cPropsSkeleton);
+  O3dObj* lObj2 = new O3dObjPrim( O3dObjPrim::PrimSphere, pSz*0.75, 4, 4 );
 
-	lObjVect->push_back( lObj1);	
-	lObjVect->push_back( lObj2 );	
+  lObjVect->push_back( lObj1);	
+  lObjVect->push_back( lObj2 );	
 
-	// Pourquoi setUseList( GL_FALSE) ? Couleurs ???? 
+  // Pourquoi setUseList( GL_FALSE) ? Couleurs ???? 
 
-	lObj1->setUseList( GL_FALSE);
-	lObj2->setUseList( GL_FALSE);
-	lObjVect->setUseList( GL_FALSE);
+  lObj1->setUseList( GL_FALSE);
+  lObj2->setUseList( GL_FALSE);
+  lObjVect->setUseList( GL_FALSE);
 
-	lObjVect->setRadius( pSz);
-	return lObjVect;
+  lObjVect->setRadius( pSz);
+  return lObjVect;
 }
 //----------------------------------------------
 Sprite3d*
@@ -69,31 +69,31 @@ ContainersMaker::makeSpriteContainer( int cObjType, EnumContainers pType, unsign
 {
   Sprite3d *sp = new Sprite3dObj( cObjContainer );
   sp->setMask( pMaskObj, pMakInteract);
-	//  sp->setMask( InteractContainer, InteractContainer );
+  //  sp->setMask( InteractContainer, InteractContainer );
  
 
   sp->SpriteFloat::set( CONTAINER_TYPE, pType );
  
   switch( pType)
-  {
-  case CONTAINER_ERG:
-	  sp->SpriteFloat::set( CONTAINER_VALUE, 100 );
-	  sp->setObjProps( &cPropsErg );
-	  break;
+    {
+    case CONTAINER_ERG:
+      sp->SpriteFloat::set( CONTAINER_VALUE, 100 );
+      sp->setObjProps( &cPropsErg );
+      break;
 
-  case CONTAINER_ROCKET:
-		sp->SpriteFloat::set( CONTAINER_VALUE, 10);
-		sp->setObjProps( &cPropsRocket);
-		break;
+    case CONTAINER_ROCKET:
+      sp->SpriteFloat::set( CONTAINER_VALUE, 10);
+      sp->setObjProps( &cPropsRocket);
+      break;
 
-  case CONTAINER_LIFE :
-  default:;
-	  sp->SpriteFloat::set( CONTAINER_VALUE, 10 );
-	  sp->setObjProps( &cPropsLife );
-	  break;
+    case CONTAINER_LIFE :
+    default:;
+      sp->SpriteFloat::set( CONTAINER_VALUE, 10 );
+      sp->setObjProps( &cPropsLife );
+      break;
 
  
-  }
+    }
 
   sp->SpriteFloat::set( SPRITE_LIFE_POINT,  10);
   sp->SpriteFloat::set( SPRITE_MAX_LIFE_POINT, 10);

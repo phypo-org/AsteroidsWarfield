@@ -9,6 +9,7 @@
 #include <iomanip>
 
 #include "Utils/PPFile.h"
+#include "Utils/PPDate.h"
 
 // **************************************
 SceneManager::SceneManager()
@@ -312,8 +313,9 @@ SceneManager::endScene()
     {
       std::ostringstream lOs ;
       lOs << sAutoSavFile << '_'
-	  << cSceneVect[cCurScene]->getStrInfo() << '_'
-	  << WorldControler::sDifficultyLevel;
+          << PPu::PPDate::GetStrDateMilliLocal( 0, true, '_',':','-')
+	//  << cSceneVect[cCurScene]->getStrInfo() << '_'
+	  << "_" <<  WorldControler::sDifficultyLevel;
       //     saveStateToFile(sAutoSavFile);
       saveStateToFile(lOs.str().c_str());
     }

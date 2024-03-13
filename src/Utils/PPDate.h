@@ -21,7 +21,7 @@ namespace PPu {
     ,SDateFormat_AAAA_MM_JJ_HH_MM_SS
   };
   //*****************************************
-  enum class PPDateUTC{ UTC, Local };
+  enum class PPDateUTC{ UTC, LOCAL };
   //*****************************************
   class PPDate {
     
@@ -84,7 +84,13 @@ namespace PPu {
 					    char pSepD='/',
 					    char pSepH=':',
 					    char pSepDH=' ' );
+    static std::string GetStrDateMilliUTC( uint iUSPrecision=4, bool pFixsx=true, char pSepD='/', char pSepH=':', char pSepDH=' ', char pSepUS='.' );
+    static std::string GetStrDateMilliLocal( uint iUSPrecision=4, bool pFixsx=true, char pSepD='/', char pSepH=':', char pSepDH=' ', char pSepUS='.' );
+
+    static std::string GetStrCurrentTime() { return GetStrDateMilliLocal();}
   };
+
+
   //*****************************************
 
 }  //  namespace

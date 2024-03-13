@@ -102,6 +102,20 @@ inline  void SplitTime( PPDateTime70 pTime, PPDateUTC iUTC, int32_t* aaaa, int32
     		
     return osstr.str();
   }
+  //------------------------------------------------
+  std::string PPDate::GetStrDateMilliUTC( uint iUSPrecision, bool pFixsx, char pSepD, char pSepH, char pSepDH, char pSepUS )
+  {     
+    std::string lStrDate( PPDate::ConvertTimeToStr( GetCurrentDateTimeFloat70(), PPDateUTC::UTC, iUSPrecision, pFixsx, pSepD, pSepH, pSepDH)) ;
+    
+    return lStrDate;
+  }
+  //------------------------------------------------
+  std::string PPDate::GetStrDateMilliLocal( uint iUSPrecision, bool pFixsx, char pSepD, char pSepH, char pSepDH, char pSepUS )
+  {           
+    std::string lStrDate( PPDate::ConvertTimeToStr(GetCurrentDateTimeFloat70(),  PPDateUTC::LOCAL, iUSPrecision, pFixsx, pSepD, pSepH, pSepDH )) ;
+
+    return lStrDate;
+  }
 
   //*****************************************
   

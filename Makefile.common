@@ -130,6 +130,14 @@ ifdef USE_GDB
 endif
 
 
+ifdef USE_ASAN
+      OPTIM=-O1 -g 
+      FLAGS_COMPIL_EXT += -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -g -O1 
+      LDFLAGS += -fsanitize=address
+# exemple make USE_ASAN=1
+endif
+
+
 IGNORE=-Wno-format-nonliteral -Wno-unused-parameter -Wno-unused-variable -Wno-cast-function-type -Wno-error=cast-function-type -Wno-conversion -Wno-shadow
 
 

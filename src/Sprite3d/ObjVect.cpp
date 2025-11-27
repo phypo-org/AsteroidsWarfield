@@ -60,6 +60,12 @@ ObjVect::deleteAll()
 
 	VO3dObj::clear();
 }
+
+// 2025-11-19 Antigravity: Fix memory leak by deleting contained objects
+ObjVect::~ObjVect()
+{
+	deleteAll();
+}
 //-----------------------------------------------
 void
 ObjVect::drawId( O3dViewProps& pVProps, O3dObjProps* pObjProps)

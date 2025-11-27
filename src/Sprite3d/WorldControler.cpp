@@ -98,6 +98,8 @@ WorldControler::~WorldControler()
 {
   delete cGame;
   delete cMainWorld;
+  // 2025-11-19 Antigravity: Fix memory leak
+  delete cHelpWorld;
 }
 //--------------------------------
 void

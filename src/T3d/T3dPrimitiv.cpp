@@ -778,8 +778,8 @@ T3dPrimitiv::MakePoles( Double3* pSrc, int pNb, T3dVect3D& pDest )
 	// On double le dernier point
 	pDest.add( dest[ pNb - 1 ] );
 
-	delete tmp;
-	delete res;
+	delete [] tmp;
+	delete [] res;
 	delete [] dest;
 }
 /*---------------------------------------------------------------------*/
@@ -897,7 +897,7 @@ T3dPrimitiv::BSplinePoles2Surf( int pUMaille, int pVMaille, T3dVect3D& pSrc, lon
 		
 		T3dPrimitiv::MakeBSplinePoint( lStorePole2, pVMaille, lTmp, pCV );	
 	}
-	delete lTmp;
+	delete  []lTmp;
 
 	pU = (pCV-3)*pVMaille +1 ;
 	pV = (pCU-3)*pUMaille +1 ;
@@ -924,7 +924,7 @@ T3dPrimitiv::BSplineSurf2Poles(  T3dVect3D& pSrc, long pCU, long pCV, T3dVect3D&
 
 		T3dPrimitiv::MakePoles( lTmp, pCV, pDest);	
 	}
-	delete lTmp;
+	delete  []lTmp;
 	
 	pU = pCV+2;
 	pV = pCU+2;

@@ -24,16 +24,17 @@ SceneManager::SceneManager()
 //------------------------------
 SceneManager::~SceneManager()
 {
-  // Bug ! (les scene sont peut deja detruite ?
+  // 2025-11-19 Antigravity: Fix memory leak by deleting all scenes
+  // Bug ! (les scene sont peut deja detruite ? -> Non, elles sont stockées ici et doivent être détruites)
   //std::cout << "~SceneManager " << cSceneVect.size() << std::endl;
-  //	for( unsigned int i=0; i<  cSceneVect.size(); i++ )
-  //{
+	for( unsigned int i=0; i<  cSceneVect.size(); i++ )
+  {
   //	std::cout << "~SceneManager " << i << " " << cSceneVect[i]->getStrName() << std::endl;
-  //	if( cSceneVect[i] != NULL ){
-  //		delete cSceneVect[i];
-  //		cSceneVect[i] = NULL;
-  //		}
-  //		}
+	if( cSceneVect[i] != NULL ){
+		delete cSceneVect[i];
+		cSceneVect[i] = NULL;
+		}
+		}
   //	std::cout << "~SceneManager end" << std::endl;
 
   cSceneVect.clear();

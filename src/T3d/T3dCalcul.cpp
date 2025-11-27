@@ -116,7 +116,7 @@ T3dCalcul::Thomas ( GLdouble noeuds[],  GLdouble poles[], int nb)
 
 /*	poles[0] = poles[1] ;  */
 
-	delete Xi;
+	delete  []Xi;
 }
 /*---------------------------------------------------------------------*/
 /*    T3dCalcul::ConvBezier  ...                                       */

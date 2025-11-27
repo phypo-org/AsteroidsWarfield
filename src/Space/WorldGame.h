@@ -43,6 +43,8 @@ public:
 public:
   static bool InitSound( const char* pSoundPath );
   static void InitSprite(  );
+  // 2025-11-19 Antigravity: Add FreeSprite() to clean up global makers
+  static void FreeSprite(  );
 
   static float GlobalScroll;
   static float XSizeWorld ;

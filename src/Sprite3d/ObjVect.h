@@ -23,6 +23,8 @@ public:
 	virtual void deleteAll();
 	virtual void add( O3dObj* pObj) { push_back( pObj ); }
 
+	// 2025-11-19 Antigravity: Fix memory leak by deleting contained objects
+	virtual ~ObjVect();
 };
 //**************************************
 

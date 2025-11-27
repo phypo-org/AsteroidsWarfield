@@ -23,6 +23,8 @@ public:
 
 
 	static void Init();
+	// 2025-11-19 Antigravity: Add Free() to clean up static resources
+	static void Free();
 
 private:
 	static std::vector <SpriteExplosion*> sFreeExploVect;

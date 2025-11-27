@@ -77,6 +77,20 @@ SpriteExplosion::Init()
 
 	// Ajouter ODRON EN SHARED (modifier OedObj pour accepter shared)
 }
+
+// 2025-11-19 Antigravity: Clean up static resources
+void SpriteExplosion::Free()
+{
+	delete sObjExplosion;
+	sObjExplosion = nullptr;
+	delete sObjExplosionPlasma;
+	sObjExplosionPlasma = nullptr;
+
+	for( auto* ptr : sFreeExploVect ) {
+		::operator delete( ptr );
+	}
+	sFreeExploVect.clear();
+}
 //----------------------
 SpriteExplosion::SpriteExplosion( float pRadius, float pLifeTime, float pDestroy )
 :Sprite3d(  pRadius, pLifeTime  )

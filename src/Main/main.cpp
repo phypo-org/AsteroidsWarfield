@@ -442,6 +442,9 @@ int main(int argc, char **argv)
 
   Utils3d::Loop();
 
+  // 2025-11-19 Antigravity: Clean up resources before exit
+  WorldGame::FreeSprite();
+
   return 0;
 }
 //****************************************************

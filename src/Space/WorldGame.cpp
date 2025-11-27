@@ -425,6 +425,19 @@ WorldGame::InitSprite()
   SpriteExplosion::Init();
 }
 //---------------------------------------------------
+// 2025-11-19 Antigravity: Clean up global makers
+void
+WorldGame::FreeSprite()
+{
+  delete TheShipsMaker;
+  delete TheMinesMaker;
+  delete TheWeaponsMaker;
+  delete TheBonusMaker;
+  delete TheAsteroidesMaker;
+
+  SpriteExplosion::Free();
+}
+//---------------------------------------------------
 
 PSoundId sOceanSound=PBadSoundId;
 

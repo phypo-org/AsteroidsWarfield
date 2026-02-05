@@ -168,7 +168,7 @@ StartDialog::init(MainMenu & rMainMenu)
 	
   cMyWindow->end();
 		
-  cMyWindow->show( 0, nullptr);
+  cMyWindow->show();
   maj();
 
 

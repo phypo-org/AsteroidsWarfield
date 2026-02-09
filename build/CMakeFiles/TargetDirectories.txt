@@ -1,7 +1,0 @@
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/install/strip.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/install/local.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/AWF.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/edit_cache.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/rebuild_cache.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/install.dir
-/home/phipo/DevGit/AsteroidsWarfield/build/CMakeFiles/list_install_components.dir

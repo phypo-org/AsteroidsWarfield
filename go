@@ -5,4 +5,4 @@ echo ./test4 -S1 -F30 $*
 # ../Debug/AsteroidFighter.exe -X1 -F10 -s  $*
 # valgrind -v --tool=callgrind   --dump-instr=yes --simulate-cache=yes --collect-jumps=yes
 #AsteroidFighter/AsteroidFighter  -f -X5 $*
-../Debug/AWF.exe   $*
+cd Run && ../Debug/AWF.exe   $*

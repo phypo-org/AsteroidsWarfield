@@ -20,12 +20,7 @@ find_package(FLTK REQUIRED)
 
 # OpenAL - Professional 3D Audio
 if(USE_SOUND)
-    find_package(OpenAL REQUIRED 
-        HINTS 
-            "/home/phipo/Bin/openal"
-            "/home/phipo/Bin/openal/include"
-            "/home/phipo/Bin/openal/build"
-    )
+    find_package(OpenAL REQUIRED)
     add_compile_definitions(USE_SOUND)
 endif()
 
@@ -133,6 +128,12 @@ set_target_properties(AWF PROPERTIES
     OUTPUT_NAME "AWF"
     # Ensure the executable is placed in the top level of the build directory
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+
+# Copy the executable to the Run directory after build
+add_custom_command(TARGET AWF POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AWF> "${CMAKE_SOURCE_DIR}/Run/AWF"
+    COMMENT "Copying executable to Run directory..."
 )
 
 # --- Installation ---

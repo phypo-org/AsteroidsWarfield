@@ -1,0 +1,35 @@
+AsteroidsWarfield - Guide d'installation Linux
+==================================================
+
+Pour faire tourner le jeu sur Linux, certaines bibliothèques système sont nécessaires.
+Voici comment les installer sur les distributions les plus courantes.
+
+1. Dépendances nécessaires :
+---------------------------
+Le jeu utilise les bibliothèques suivantes :
+- FLTK 1.3 (Interface graphique)
+- OpenGL & GLU (Rendu 3D)
+- OpenAL (Son 3D)
+- libsndfile (Chargement des fichiers audio)
+
+2. Commandes d'installation :
+----------------------------
+
+Sur Ubuntu, Debian, Linux Mint et dérivés :
+   Lancer dans un terminal :
+   sudo apt update
+   sudo apt install libfltk1.3 libopenal1 libsndfile1 libglu1-mesa libgl1-mesa-glx
+
+Sur Fedora :
+   sudo dnf install fltk freealut openal-soft libsndfile mesa-libGLU mesa-libGL
+
+Sur Arch Linux :
+   sudo pacman -S fltk openal libsndfile glu mesa
+
+3. Lancement du jeu :
+--------------------
+Une fois les dépendances installées, vous pouvez lancer le jeu depuis ce répertoire :
+   ./AWF
+
+Ou utiliser le script de lancement s'il est présent :
+   ./AWF.sh
